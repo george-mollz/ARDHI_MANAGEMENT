@@ -1,14 +1,26 @@
 package com.ardhi.Land.registration.controller;
 
 
-import com.ardhi.Land.registration.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.ardhi.Land.registration.service.serviceImpl.RegisterPlotServiceImpl;
+import com.ardhi.Land.registration.dto.PatchPlotRequestDto;
+import com.ardhi.Land.registration.dto.PatchPlotResponseDto;
+import com.ardhi.Land.registration.dto.RegisterPlotRequestDto;
+import com.ardhi.Land.registration.dto.SearchPlotRequestDto;
+import com.ardhi.Land.registration.dto.SearchPlotResponseDto;
 import com.ardhi.Land.registration.service.serviceImpl.PatchPlotServiceImpl;
+import com.ardhi.Land.registration.service.serviceImpl.RegisterPlotServiceImpl;
 import com.ardhi.Land.registration.service.serviceImpl.SearchPlotServiceImpl;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping ("/api/v1/land")
@@ -48,10 +60,9 @@ public class LandController {
 
 
 
-    @PatchMapping("/patch/plotNo")
-    public ResponseEntity<PatchPlotResponseDto> patchPlotController(@RequestBody PatchPlotRequestDto patchPlotRequestDto){
-        
-        PatchPlotResponseDto response = patchPlotServiceImpl.patchPlot(patchPlotRequestDto);
+    @PatchMapping("/patch/plotNo/{id}")
+    public ResponseEntity<PatchPlotResponseDto> patchPlotController(@PathVariable UUID id, @RequestBody PatchPlotRequestDto patchPlotRequestDto){
+        PatchPlotResponseDto response = patchPlotServiceImpl.patchPlot(id, patchPlotRequestDto);
         return ResponseEntity.ok(response);
     }
 

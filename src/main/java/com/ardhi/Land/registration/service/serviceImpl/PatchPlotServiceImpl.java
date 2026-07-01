@@ -1,6 +1,5 @@
 package com.ardhi.Land.registration.service.serviceImpl;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,47 +18,40 @@ public class PatchPlotServiceImpl implements PatchPlotService {
     LandRepository landRepository;
 
     @Override
-    public PatchPlotResponseDto patchPlot(PatchPlotRequestDto patchPlotRequestDto){
-        UUID plotId = patchPlotRequestDto.getPlotId();
-        String plotNo = patchPlotRequestDto.getPlotNo();
+    public PatchPlotResponseDto patchPlot(UUID id, PatchPlotRequestDto patchPlotRequestDto){
 
-        if (plotId == null) {
-            PatchPlotResponseDto errorResponseDto = new PatchPlotResponseDto();
-            errorResponseDto.setMessage("plotId is required");
-            return errorResponseDto;
+        //Create new model object of User type
+        //The store the user id from repository
+        Land land = landRepository.findById(id)
+                .orElseThrow(()->
+                        new RuntimeException("Plot not found!!!"));
+
+        if(patchPlotRequestDto.getPlotNo() != null ){
+            land.setPlotNo(patchPlotRequestDto.getPlotNo());
         }
 
-        if (plotNo == null || plotNo.isBlank()) {
-            PatchPlotResponseDto errorResponseDto = new PatchPlotResponseDto();
-            errorResponseDto.setMessage("Please fill the required fields");
-            return errorResponseDto;
-        }
 
-        Optional<Land> existing = landRepository.findById(plotId);
-
-        if (existing.isEmpty()) {
-            PatchPlotResponseDto errorResponseDto = new PatchPlotResponseDto();
-            errorResponseDto.setMessage("PlotId not found!!!");
-            return errorResponseDto;
-        }
-
-        Land land = existing.get();
-
-        Optional<Land> duplicate = landRepository.findByPlotNo(plotNo);
-        if (duplicate.isPresent() && !duplicate.get().getId().equals(plotId)) {
-            PatchPlotResponseDto errorResponseDto = new PatchPlotResponseDto();
-            errorResponseDto.setMessage("Plot number already exists");
-            return errorResponseDto;
-        }
-
-        land.setPlotNo(plotNo);
-        landRepository.save(land);
+        Land savedLand = landRepository.save(land);
 
         PatchPlotResponseDto response = new PatchPlotResponseDto();
-        response.setPlotNo(land.getPlotNo());
-        response.setRegion(land.getRegion());
-        response.setMessage("PlotNo. updated successfully!!!");
+
+
+        response.setId(savedLand.getId());
+        response.setRegion(savedLand.getRegion());
+        response.setPlotNo(savedLand.getPlotNo());
+
+
 
         return response;
+        /***
+         *  Example
+         * {
+         *    id: 08432u049303939840394,
+         *    plotNo: P-1000,
+         *    region: Nairobi
+         */
+
+
+
     }
 }
