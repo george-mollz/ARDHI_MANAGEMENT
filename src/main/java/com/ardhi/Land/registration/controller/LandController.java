@@ -1,6 +1,9 @@
 package com.ardhi.Land.registration.controller;
 
 
+import com.ardhi.Land.registration.service.PatchPlotService;
+import com.ardhi.Land.registration.service.RegisterPlotService;
+import com.ardhi.Land.registration.service.SearchPlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +19,7 @@ import com.ardhi.Land.registration.dto.PatchPlotResponseDto;
 import com.ardhi.Land.registration.dto.RegisterPlotRequestDto;
 import com.ardhi.Land.registration.dto.SearchPlotRequestDto;
 import com.ardhi.Land.registration.dto.SearchPlotResponseDto;
-import com.ardhi.Land.registration.service.serviceImpl.PatchPlotServiceImpl;
-import com.ardhi.Land.registration.service.serviceImpl.RegisterPlotServiceImpl;
-import com.ardhi.Land.registration.service.serviceImpl.SearchPlotServiceImpl;
+
 
 import java.util.UUID;
 
@@ -27,18 +28,18 @@ import java.util.UUID;
 public class LandController {
 
     @Autowired
-    private RegisterPlotServiceImpl registerPlotServiceImpl;
+    private RegisterPlotService registerPlotService;
 
     @Autowired()
-    private SearchPlotServiceImpl searchPlotServiceImpl;
+    private SearchPlotService searchPlotService;
     
     @Autowired
-    private PatchPlotServiceImpl patchPlotServiceImpl;
+    private PatchPlotService patchPlotService;
 
 
     @PostMapping("/register")
     public ResponseEntity<String> registerLand(@RequestBody RegisterPlotRequestDto registerPlotRequestDto){
-        String response = registerPlotServiceImpl.registerPlot(registerPlotRequestDto);
+        String response = registerPlotService.registerPlot(registerPlotRequestDto);
 
                 return ResponseEntity.ok(response);
 
@@ -53,7 +54,7 @@ public class LandController {
         searchPlotRequestDto.setPlotNo(plotNo);
         searchPlotRequestDto.setRegion(region);
 
-        SearchPlotResponseDto response = searchPlotServiceImpl.getPlot(searchPlotRequestDto);
+        SearchPlotResponseDto response = searchPlotService.getPlot(searchPlotRequestDto);
 
         return ResponseEntity.ok(response);
     }
@@ -62,7 +63,7 @@ public class LandController {
 
     @PatchMapping("/patch/plotNo/{id}")
     public ResponseEntity<PatchPlotResponseDto> patchPlotController(@PathVariable UUID id, @RequestBody PatchPlotRequestDto patchPlotRequestDto){
-        PatchPlotResponseDto response = patchPlotServiceImpl.patchPlot(id, patchPlotRequestDto);
+        PatchPlotResponseDto response = patchPlotService.patchPlot(id, patchPlotRequestDto);
         return ResponseEntity.ok(response);
     }
 

@@ -15,3 +15,4 @@ public class PatchPlotRequestDto {
     private String plotNo;
 
 }
+

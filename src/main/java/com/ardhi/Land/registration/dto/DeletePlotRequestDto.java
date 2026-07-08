@@ -1,6 +1,5 @@
 package com.ardhi.Land.registration.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +11,9 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatchPlotResponseDto {
+public class DeletePlotRequestDto {
 
-    private UUID id;
+
     private String plotNo;
     private String region;
-
 }
-
